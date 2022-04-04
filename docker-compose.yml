@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+  auth-service:
+    container_name: auth-service
+    build:
+      context: auth-service
+      dockerfile: Dockerfile
+    image: auth-service
+    ports:
+      - published: ${AUTH_SVC_PORT:-8888}
+        target: 8888
+
+  movie-service:
+    container_name: movie-service
+    build:
+      context: movie-service
+      target: production-build-stage
+      dockerfile: Dockerfile
+    ports:
+      - published: ${MOVIE_SVC_PORT:-3000}
+        target: 3000
+    environment:
+      OMDB_API_KEY: ${OMDB_API_KEY}
+    restart: 'unless-stopped'
+    networks:
+      - backend
+    links:
+      - mongo
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mvertes/alpine-mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data:/data/db
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local

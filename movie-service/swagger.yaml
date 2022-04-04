@@ -1,0 +1,125 @@
+tags:
+  - name: movies
+    description: movies API
+
+paths:
+  /movies:
+    # [GET] fetch all movies
+    get:
+      tags:
+        - Movie
+      summary: Fetches user movies
+      security:
+        - bearerAuth: []
+      description: "By passing in the appropriate options, you can get user movies"
+      responses:
+        "200":
+          description: user movies
+        "401":
+          description: user is not authorized
+        "500":
+          description: internal server error
+    # [POST] create a new movie
+    post:
+      tags:
+        - Movie
+      summary: adds movie
+      description: Adds an movie to user movie list
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/definitions/movieAdd"
+      responses:
+        "201":
+          description: movie created
+        "400":
+          description: invalid input, object invalid
+        "401":
+          description: user is not authorized
+        "404":
+          description: movie was not found
+        "409":
+          description: an existing item already exists
+        "500":
+          description: internal server error
+  /auth:
+    servers:
+      - url: "http://127.0.0.1:8888"
+        description: Auth API
+    post:
+      tags:
+        - Auth
+      summary: Authenticates user
+      description: User authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/definitions/authData"
+      responses:
+        "200":
+          description: user authenticated
+        "400":
+          description: invalid payload
+        "401":
+          description: bad credentials
+
+# definitions
+definitions:
+  movie:
+    type: object
+    required:
+      - title
+    properties:
+      _id:
+        type: string
+        format: ObjectId
+        example: 60e27d909f3c9b0011647db2
+      title:
+        type: string
+        example: Interstellar
+      genre:
+        type: string
+        example: Adventure, Drama, Sci-Fi
+      director:
+        type: string
+        example: christopher Nolan
+      release:
+        type: string
+        format: date-time
+        example: Fri Nov 07 2014 00:00:00 GMT+0000 (Coordinated Universal Time)
+  movieAdd:
+    type: object
+    required:
+      - title
+    properties:
+      title:
+        type: string
+        example: Interstellar
+  authData:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        example: basic-thomas
+      password:
+        type: string
+        example: sR-_pcoow-27-6PAwCD8
+
+schemes:
+  - https
+  - http
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      bearerFormat: bearer

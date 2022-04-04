@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  proxy:
+    image: nginx:alpine
+    container_name: proxy
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    restart: 'unless-stopped'
+    networks:
+      - backend
+  movie-service:
+    build:
+      context: ./
+      target: production-build-stage
+      dockerfile: Dockerfile
+    container_name: server
+    image: movie-service
+    ports:
+      - '3000:3000'
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      OMDB_API_KEY: ${OMDB_API_KEY}
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    restart: 'unless-stopped'
+    networks:
+      - backend
+    links:
+      - mongo
+    depends_on:
+      - mongo
+  mongo:
+    image: mvertes/alpine-mongo
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
