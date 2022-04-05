@@ -9,7 +9,7 @@ afterAll(async () => {
 
 describe('Testing Index', () => {
   describe('[GET] /', () => {
-    it('response statusCode 200', () => {
+    it('response status 200', () => {
       const indexRoute = new IndexRoute();
       const app = new App([indexRoute]);
 
