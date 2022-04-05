@@ -102,7 +102,7 @@ Request:
 
 ```
 
-curl --location --request POST '0.0.0.0:3001/api/v0/movies' \
+curl --location --request POST 'http://localhost:3000/movies' \
 --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywibmFtZSI6IkJhc2ljIFRob21hcyIsInJvbGUiOiJiYXNpYyIsImlhdCI6MTYyNTQ5MTI4MywiZXhwIjoxNjI1NDkzMDgzLCJpc3MiOiJodHRwczovL3d3dy5uZXRndXJ1LmNvbS8iLCJzdWIiOiIxMjMifQ.jmZgZAadfcpo82dsfxn7TvKBhw5uN9nq34WgKGgOcus' \
 --header 'Content-Type: application/json' \
 --data-raw '{
