@@ -29,7 +29,7 @@ run:
 all: build
 
 start:
-	JWT_SECRET=secret OMDB_API_KEY=ef866f8d docker-compose up
+	OMDB_API_KEY=$(OMDB_API_KEY) docker-compose up -d
 
 test:
-	JWT_SECRET=secret OMDB_API_KEY=ef866f8d docker-compose run --rm movie-service npm test
+	OMDB_API_KEY=$(OMDB_API_KEY) docker-compose run --rm movie-service npm test

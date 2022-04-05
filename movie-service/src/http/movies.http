@@ -1,0 +1,22 @@
+# baseURL
+@baseURL = http://localhost:3000
+
+###
+# Find All Movies
+GET {{ baseURL }}/movies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywibmFtZSI6IkJhc2ljIFRob21hcyIsInJvbGUiOiJiYXNpYyIsImlhdCI6MTY0OTExOTk4OSwiZXhwIjoxNjQ5MTIxNzg5LCJpc3MiOiJodHRwczovL3d3dy5uZXRndXJ1LmNvbS8iLCJzdWIiOiIxMjMifQ.QYSFCHZ7Mntjb5ck7V9HsjH7-HFimrPwQdJXD6h3OVg
+
+
+
+###
+# Create a movie
+POST {{ baseURL }}/movies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywibmFtZSI6IkJhc2ljIFRob21hcyIsInJvbGUiOiJiYXNpYyIsImlhdCI6MTY0OTExOTk4OSwiZXhwIjoxNjQ5MTIxNzg5LCJpc3MiOiJodHRwczovL3d3dy5uZXRndXJ1LmNvbS8iLCJzdWIiOiIxMjMifQ.QYSFCHZ7Mntjb5ck7V9HsjH7-HFimrPwQdJXD6h3OVg
+
+Content-Type: application/json
+
+{
+  "title": "The Matrix",
+}
+
+
