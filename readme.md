@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/tamzidkarim/nodejs-microservices/branch/main/graph/badge.svg?token=71CWKVZH1R)](https://codecov.io/gh/tamzidkarim/nodejs-microservices)
+
 # Node.js recruitment task
 
 ## Description
