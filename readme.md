@@ -1,5 +1,15 @@
 [![codecov](https://codecov.io/gh/tamzidkarim/nodejs-microservices/branch/main/graph/badge.svg?token=71CWKVZH1R)](https://codecov.io/gh/tamzidkarim/nodejs-microservices)
 
+<img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white" />
+<img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" />
+<img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+<img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" />
+<img src="https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white" />
+<img src="https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E" />
+<img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" />
+<img src="https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white" />
+<img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white" />
+
 # Node.js recruitment task
 
 ## Description
@@ -13,9 +23,10 @@ The task is to create a movie microservice incorporating with the already develo
 - Express
 - MongoDB
 - Mongoose
+- Nginx
+- Docker
 - Axios
 - Jest
-- Docker
 - Swagger
 
 **Overview of the Project**
@@ -26,12 +37,13 @@ The task is to create a movie microservice incorporating with the already develo
 - `Movies Service` - user can add movies and fetch them
 
 2. Creating and fetching movies data is protected and Authorization token is required. The token should be passed in request's Authorization header to be authorized.
-3. The `Movies Service` is dockerized in movie-service, and the `Auth Service` is dockerized in auth-service. You can run them seperately. Also The Movies and Auth services are dockerized together (if you want to run services together). Make sure to have docker and docker-compose installed.
+3. The `Movies Service` is dockerized in movie-service, and the `Auth Service` is dockerized in auth-service. You can run them separately. Also The Movies and Auth services are dockerized together (if you want to run services together). Make sure to have docker and docker-compose installed.
 4. By default `Movies Service` starts on port 3000 and `Auth Service` starts on port 8888.
+5. Having Nginx running as a proxy, we can access both of the services just by hitting `localhost`. Nginx is working a api-gateway and proxy-passing the requests to their intended servers. So that we don't have to deal with different servers. We just need to know the url of api-gateway and it will intelligently forward the requests to the expected servers.
 
 **Top Level Project Structure**
 
-`root` - root directory contains makefile and docker-compose file to run the whole project.
+`root` - root directory contains nginx config, makefile and docker-compose file to run the whole project.
 
 `auth-service` - it contains the codes for `Authorization Service`
 
@@ -69,9 +81,9 @@ OMDB_API_KEY=<YOUR_OMDB_API_KEY> docker-compose up -d
 MOVIE_SVC_PORT=<MOVIE_SVC_PORT> AUTH_SVC_PORT=<AUTH_SVC_PORT> OMDB_API_KEY=<YOUR_OMDB_API_KEY> docker-compose up -d
 ```
 
-`JWT_SECRET` and `OMDB_API_KEY` are mandatory. Without `JWT_SECRET` Authorization will not work and without `OMDB_API_KEY` movies adding will not work.
+`OMDB_API_KEY` are mandatory. Without `OMDB_API_KEY` user wont be able to add movies.
 
-- To stop the services run: `docker-compose down`
+- To stop the services run: `docker-compose down` or `make down`
 
 ## Movies service
 
@@ -99,6 +111,19 @@ OMDB_API_KEY=<OMDB_API_KEY> docker-compose up -d
 
 **Example POST**
 Request:
+
+```
+
+curl --location --request POST 'http://localhost/movies' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywibmFtZSI6IkJhc2ljIFRob21hcyIsInJvbGUiOiJiYXNpYyIsImlhdCI6MTYyNTQ5MTI4MywiZXhwIjoxNjI1NDkzMDgzLCJpc3MiOiJodHRwczovL3d3dy5uZXRndXJ1LmNvbS8iLCJzdWIiOiIxMjMifQ.jmZgZAadfcpo82dsfxn7TvKBhw5uN9nq34WgKGgOcus' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"title": "iron man 3"
+}'
+
+```
+
+OR, if you want to access the server directly using port address,
 
 ```
 
@@ -142,6 +167,15 @@ curl --location --request GET 'http://localhost:3000/movies' \
 
 ```
 
+OR, if you want to access the server directly using port address,
+
+```
+
+curl --location --request GET 'http://localhost:3000/movies' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywibmFtZSI6IkJhc2ljIFRob21hcyIsInJvbGUiOiJiYXNpYyIsImlhdCI6MTY0OTExNzEyOSwiZXhwIjoxNjQ5MTE4OTI5LCJpc3MiOiJodHRwczovL3d3dy5uZXRndXJ1LmNvbS8iLCJzdWIiOiIxMjMifQ.-Am1nwkGWz4DHqE1bwW-_-rsjAP0XLb_fqvOBwTcDfI'
+
+```
+
 Response:
 
 ```
@@ -160,6 +194,35 @@ Response:
 }
 
 ```
+
+## Authorization service
+
+## Example request
+
+To authorize user call the auth service using for example `curl`. The default port for auth service is `8888`
+
+Request
+
+```
+curl --location --request POST 'localhost/auth' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "basic-thomas",
+    "password": "sR-_pcoow-27-6PAwCD8"
+}'
+```
+
+Response
+
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywibmFtZSI6IkJhc2ljIFRob21hcyIsInJvbGUiOiJiYXNpYyIsImlhdCI6MTYwNjIyMTgzOCwiZXhwIjoxNjA2MjIzNjM4LCJpc3MiOiJodHRwczovL3d3dy5uZXRndXJ1LmNvbS8iLCJzdWIiOiIxMjMifQ.KjZ3zZM1lZa1SB8U-W65oQApSiC70ePdkQ7LbAhpUQg"
+}
+```
+
+### Postman collection
+
+Inside postman collection you can find all the example requests. I have uploaded the collection json file. Here is the link https://www.getpostman.com/collections/6e8d901ab64216ad9995 as well.
 
 ## Tests
 
@@ -198,6 +261,14 @@ Using github actions a CI/CD pipeline has been created. After each pull request 
 ### API docs (swagger)
 
 API docs is generated using open api specification and swagger. The swagger documentation can be accessed through following url.
+
+```
+
+http://localhost/api-docs
+
+```
+
+OR,
 
 ```
 
