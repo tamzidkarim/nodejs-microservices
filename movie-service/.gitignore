@@ -3,4 +3,5 @@ dist/
 .vscode
 logs
 src/logs
-coverage
+coverage/*
+!clover.xml
