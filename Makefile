@@ -8,19 +8,19 @@ APP_NAME := $(APP_NAME)
 
 
 build:
-	docker-compose build --no-cache
+ 	OMDB_API_KEY=$(OMDB_API_KEY) docker-compose build --no-cache
 
 clean:
 	docker-compose rm -f
 
 run:
-	JWT_SECRET=secret OMDB_API_KEY=ef866f8d docker-compose up
+ 	OMDB_API_KEY=$(OMDB_API_KEY) docker-compose up
 
 down:	
 	docker-compose down
 
 all: 
-	docker-compose down && JWT_SECRET=secret OMDB_API_KEY=ef866f8d docker-compose build --no-cache && JWT_SECRET=secret OMDB_API_KEY=ef866f8d docker-compose up
+	docker-compose down && OMDB_API_KEY=$(OMDB_API_KEY) docker-compose build --no-cache && OMDB_API_KEY=$(OMDB_API_KEY) docker-compose up
 
 test:
-	cd movie-service && JWT_SECRET=secret OMDB_API_KEY=ef866f8d docker-compose run --rm movie-service npm test
+	cd movie-service && OMDB_API_KEY=$(OMDB_API_KEY) docker-compose run --rm movie-service npm test
