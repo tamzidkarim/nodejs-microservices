@@ -179,7 +179,7 @@ cd movie-service &&  JWT_SECRET=<YOUR_SECRET> OMDB_API_KEY=<YOUR_OMDB_API_KEY> d
 
 ```
 
-or with npm()
+or with npm
 
 ```
 
