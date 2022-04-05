@@ -43,7 +43,7 @@ You need to have `docker` and `docker-compose` installed on your computer to run
 
 ### Run locally
 
-- Clone this repository:
+- Clone this repository and then cd into `nodejs-microservices`:
 
 ```
 git clone https://github.com/tamzidkarim/nodejs-microservices.git
