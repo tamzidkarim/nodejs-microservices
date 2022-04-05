@@ -3,3 +3,4 @@ dist/
 .vscode
 logs
 src/logs
+coverage
